@@ -32,6 +32,15 @@ app_license = "MIT"
 # doctype_tree_js = {"doctype" : "public/js/doctype_tree.js"}
 # doctype_calendar_js = {"doctype" : "public/js/doctype_calendar.js"}
 
+# fixtures = [
+#     # export all records from the Category table
+#     "Category",
+#
+#     # export only those records that match the filters from the Role table
+#     {"dt": "Role", "filters": [["role_name", "like", "Admin%"]]},
+# ]
+
+
 # Home Pages
 # ----------
 
