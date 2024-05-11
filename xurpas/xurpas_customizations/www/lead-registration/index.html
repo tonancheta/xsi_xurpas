@@ -44,7 +44,7 @@
     
 
   {% else %}
-    <!-- Load list of Weekly Planners -->   
+    <!-- Load list of Registered Leads -->   
     <div class="mt-4">
       {{ welcome_text }}
       <br /><br /><br />
@@ -54,45 +54,36 @@
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">{{ _("Instructor") }}</th>
-          <th scope="col">{{ _("Campus") }}</th>
-          <th scope="col">{{ _("Student Group") }}</th>
-          <th scope="col">{{ _("Dates") }}</th>
+          <th scope="col">{{ _("Company Name") }}</th>
+          <th scope="col">{{ _("Contact") }}</th>
+          <th scope="col">{{ _("Designation") }}</th>
+          <th scope="col">{{ _("Expected Start Date") }}</th>
           <th class="text-center" scope="col">{{ _("Status") }}</th>
           <th class="text-center" scope="col" text-align="left">{{ _("Actions") }}</th>
         </tr>
       </thead>
       <tbody>
-        {% for planner in weekly_planners %}
+        {% for lead in leads %}
           <tr>
-            <th scope="row">{{ planner.counter }}</th>
-            <td>{{ planner.instructor }}</td>
-            <td>{{ planner.campus }}</td>
-            <td>{{ planner.student_group }}</td>
-            <td>{{ planner.start_date }} to {{ planner.end_date }}</td>
+            <th scope="row">{{ lead.counter }}</th>
+            <td>{{ lead.company }}</td>
+            <td>{{ lead.contact }}</td>
+            <td>{{ lead.designation }}</td>
+            <td>{{ lead.start_date }}</td>
             
             <td class="text-center">
-              {% if planner.is_approved %}
+              {% if lead.is_approved %}
                 <span class="badge rounded-pill bg-success">{{ _("Approved") }}</span>
                 
-              {% elif planner.status == 0 %}
+              {% elif lead.status == 0 %}
                 <span class="badge rounded-pill bg-secondary">{{ _("Draft") }}</span>
                 
-              {% elif planner.status == 1 %}
+              {% elif lead.status == 1 %}
                 <span class="badge rounded-pill bg-info">{{ _("Submitted") }}</span>
-
-              {% elif planner.status == 2 %}
-                <span class="badge rounded-pill bg-warning">{{ _("Cancelled") }}</span>
               {% endif %}
             </td>
             <td class="text-center">
-              <div class="badge badge-primary translate-middle-x" planner-name="{{ planner.name }}" role="button" onclick="open_planner_detail()">{{ _("Edit") }}</div>
-              {%if is_head_instructor or is_hos %}
-                <div class="badge badge-primary translate-middle-x"> </div>
-                <div class="badge badge-primary translate-middle-x" planner-name="{{ planner.name }}" role="button" onclick="approve_planner()">{{ _("Approve") }}</div>
-                <div class="badge badge-primary translate-middle-x"></div>
-              {% endif %}
-              <div class="badge badge-secondary translate-middle-x" id="modal_print_planner_button" role="button" planner-name="{{ planner.name }}" planner-instructor="{{ planner.instructor }}" student-group="{{ planner.student_group }}" planner-start="{{ planner.start_date }}" onclick="print_planner_modal()">{{ _("Print") }}</div>
+              <div class="badge badge-primary translate-middle-x" lead-name="{{ lead.name }}" role="button" onclick="open_lead_detail()">{{ _("Edit") }}</div>
             </td>
           </tr>
         {% endfor %}
@@ -105,41 +96,14 @@
       <div class="btn btn-outline-primary" role="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">{{ _("Help") }}</div>
       &nbsp;
 
-      {% if not is_reviewer %}
-        <div class="btn btn-primary" role="button" data-toggle="modal" data-target="#modal_new_planner">{{ _("New Planner") }}</div>
-      {% endif %}
-
-      {%if is_hos %}
-        <div class="container pull-right">
-          <div class="ms-auto btn btn-outline-primary pull-right" role="button" onclick="open_settings()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
-              <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
-              <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
-            </svg>
-          </div>
-
-          {%if hos_show_all %}
-            <div class="ms-auto btn btn-outline-primary pull-right" role="button" id="btn_show_all" >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel" viewBox="0 0 16 16">
-                <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5zm1 .5v1.308l4.372 4.858A.5.5 0 0 1 7 8.5v5.306l2-.666V8.5a.5.5 0 0 1 .128-.334L13.5 3.308V2z"/>
-              </svg>
-            </div>
-          {% else %}
-            <div class="ms-auto btn btn-outline-primary pull-right" role="button" id="btn_show_all" >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-funnel-fill" viewBox="0 0 16 16">
-                <path d="M1.5 1.5A.5.5 0 0 1 2 1h12a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.128.334L10 8.692V13.5a.5.5 0 0 1-.342.474l-3 1A.5.5 0 0 1 6 14.5V8.692L1.628 3.834A.5.5 0 0 1 1.5 3.5z"/>
-              </svg>
-            </div>
-          {% endif %}
-        </div>  
-      {% endif %}
+      <div class="btn btn-primary" role="button" data-toggle="modal" data-target="#modal_new_lead">{{ _("New Lead") }}</div>
     </div>
 
     <small class="text-muted">{{ _("Version") }} {{ version }}</small>
   {% endif %} 
 
   <!-- Offcanvas to display the Help -->
-  <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+  <!-- <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
     <div class="offcanvas-header">
       <h5 class="offcanvas-title" id="offcanvasExampleLabel">Help</h5>
       <button type="button" class="btn-close text-reset" data-dismiss="offcanvas" aria-label="Close"></button>
@@ -149,7 +113,7 @@
         {{ frappe.render_template('weekly_planner/www/weekly-planner/help.html', {}) }}
       </div>
     </div>
-  </div>
+  </div> -->
   <!-- ./ Offcanvas to display the Help -->
   
   <!-- Action Confirmation Modal -->
@@ -172,103 +136,12 @@
   </div>
   <!-- ./ Action Confirmation Modal -->
 
-  <!-- Print Report Modal -->
-  <div class="modal fade" id="modal_print_planner" data-backdrop="static" data-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">{{ _("Print Reports") }}</h5>
-          <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <div class="container-fluid px-2 py-2 border bg-light">
-            <div class="row">
-              <div class="col">
-                <label>{{_("Select Report") }}</label>
-                <select class="form-select bg-light" name="student_group" id="selected_report" onchange="enable_report_options()" required>
-                  <option value="Planner" selected>{{ _("Planner") }}</option>
-                  <option value="Student">{{ _("Student") }}</option>
-                </select>
-                <!-- Print report size here -->
-                <br>
-                <label>{{_("Select Print Report Size") }}</label>
-                <select class="form-select bg-light" name="paper_size_group" id="selected_paper_size" required>
-                  <option value="Legal">{{ _("Legal") }}</option>
-                  <option value="Letter" >{{ _("Letter") }}</option>
-                  <option value="A4">{{ _("A4") }}</option>
-                </select>
-                <br>
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="remember_selected_paper_size" checked>
-                  <label class="form-check-label" for="remember_selected_paper_size">{{ _("Remember Print Size") }}</label>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <hr />
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="check_limit_to_planner" onchange="enable_report_options()" disabled>
-                  <label class="form-check-label" for="check_limit_to_planner">{{ _("Limit report to selected Planner") }}</label>
-                </div>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <hr />
-                <label>{{_("Student") }}</label><br />
-                <input class="text-align-left bg-light" name="student" id="selected_student" disabled>
-                <button type="button" class="btn btn-primary" id="button_select" onclick="select_student('select')" disabled>{{ _("Select") }}</button>
-              </div>
-            </div>
-            <br />
-            <div class="row">
-              <div class="col">
-                <label>{{ _("Start Date") }}
-                  <input class="input-group-text text-align-left" id="report_start_date" type="date" disabled></label>
-              </div>
-              <div class="col">
-                <label>{{ _("End Date") }}<input class="input-group-text text-align-left" id="report_end_date" type="date" disabled></label> 
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" id="modal_action_print">{{ _("Print") }}</button>
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{{ _("Cancel") }}</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- ./ Print Report Modal -->  
-
-  <!-- Select Student Modal -->
-  <div class="modal fade" id="modal_select_student" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <!-- New Lead Modal -->
+  <div class="modal fade" id="modal_new_lead" data-backdrop="static" data-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">{{ _("Select Student") }}</h5>
-        </div>
-        <div class="modal-body" id="modal_print_student_body">
-          <table role="button" class="table table-lg table-striped" style="width: 100%" id="student_table"></table>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="modal_action_select" selected-student="0" onclick="select_student('selected')">{{ _("Select") }}</button>
-          <button type="button" class="btn btn-secondary" onclick="select_student('cancelled')">{{ _("Cancel") }}</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- ./ Select Student Modal -->  
-    
-  <!-- New Planner Modal -->
-  <div class="modal fade" id="modal_new_planner" data-backdrop="static" data-keyboard="true" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">{{ _("New Planner") }}</h5>
+          <h5 class="modal-title" id="staticBackdropLabel">{{ _("New Lead") }}</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -276,44 +149,31 @@
         <div class="modal-body">
           <div class="container-fluid px-2 py-2 border bg-light">
             <div class="row">
-              <div class="col">
-                <label>{{_("Instructor") }}</label><br />
-                <input class="text-align-left bg-light" name="instructor" id="instructor" value="{{ instructor }}" readonly>
-              </div>
-              <div class="col">
-                <label>{{_("Student Group") }}</label>
-                <select class="form-select bg-light" name="student_group" id="selected_group" required>
-                  <option value="" selected>{{ _("Select Student Group") }}</option>
-                  {% for group in student_groups %}
-                    <option value="{{ group.parent }}">{{ group.parent }}</option>
-                  {% endfor %}
-                </select>
-              </div>
+              <label>{{_("Company") }}</label><br />
+              <input class="text-align-left bg-light" name="company" id="company" value="{{ company }}">
             </div>
             <div class="row py-2">
-              <div class="col">
-                <label>{{ _("Start Date") }}
-                  <input class="input-group-text text-align-left" id="lesson_start_date" type="date" onchange="calc_end_date('lesson_start_date','lesson_end_date')" required></label>
-              </div>
-              <div class="col">
-                <!-- Calculate lesson_date + 7 -->
-                <label>{{ _("End Date") }}<input class="input-group-text text-align-left" id="lesson_end_date" type="date" readonly></label> 
-              </div>
+              <label>{{_("Contact") }}</label><br />
+              <input class="text-align-left bg-light" name="contact" id="contact" value="{{ contact }}">
+            </div>
+            <div class="row py-2">
+              <label>{{_("Expected Start Date") }}</label><br />
+              <input class="text-align-left bg-light" name="start_date" id="start_date" value="{{ start_date }}">
             </div>
             <div class="row">
               <div class="input-group">
-                <span class="input-group-text">{{_("Description") }}</span>
+                <span class="input-group-text">{{_("Deal Description") }}</span>
                 <textarea class="form-control" aria-label="With textarea" id="description"></textarea>
               </div>
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="save_planner()">{{ _("Save") }}</button>
+          <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="save_lead()">{{ _("Save") }}</button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ _("Cancel") }}</button>
         </div>
       </div>
     </div>  
   </div>
-  <!-- ./ New Planner Modal -->
+  <!-- ./ New Lead Modal -->
 </main>
 {% endblock %}

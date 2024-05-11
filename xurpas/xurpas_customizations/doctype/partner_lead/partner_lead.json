@@ -7,10 +7,15 @@
  "field_order": [
   "section_break_zcsq",
   "company",
+  "sales_partner",
+  "amended_from",
+  "section_break_pykt",
   "contact_person",
+  "expected_start_date",
+  "column_break_kksf",
   "designation",
-  "deal_description",
-  "amended_from"
+  "section_break_sprl",
+  "deal_description"
  ],
  "fields": [
   {
@@ -46,12 +51,35 @@
    "fieldname": "deal_description",
    "fieldtype": "Small Text",
    "label": "Deal Description"
+  },
+  {
+   "fieldname": "section_break_pykt",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "expected_start_date",
+   "fieldtype": "Date",
+   "label": "Expected Start Date"
+  },
+  {
+   "fieldname": "column_break_kksf",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_sprl",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "sales_partner",
+   "fieldtype": "Link",
+   "label": "Sales Partner",
+   "options": "Sales Partner"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-05-07 22:51:36.830455",
+ "modified": "2024-05-10 22:12:28.294243",
  "modified_by": "Administrator",
  "module": "Xurpas Customizations",
  "name": "Partner Lead",
