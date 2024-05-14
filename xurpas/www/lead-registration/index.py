@@ -18,17 +18,25 @@ def get_context(context):
 
     # Search for the Sales Partner based on the current user
     if not context.invalid_role:
-        sales_partner = frappe.get_doc('Sales Partner User', {'user': cur_user.name}).parent
+        try:
+            sales_partner = frappe.get_doc('Sales Partner User', {'user': cur_user.name}).parent
+        except:
+            context.invalid_role = True
 
     # 2. welcome_text
-    context.welcome_text = _('Welcome to the Lead Registration Page for ' + sales_partner + '! Please fill out the form below to register a new lead.')
+    context.welcome_text = _('Welcome to the Lead Registration Page for ' + sales_partner + '!' + \
+        ' Click New Lead to register a new lead or any of the Edit buttons to update an existing lead.')
     
     # 3. leads
-    context.leads = frappe.get_all('Partner Lead', \
-        fields=['company', 'contact_person', 'designation', 'expected_start_date', 'deal_description'], \
-        filters={'sales_partner': sales_partner})
+    context.leads = frappe.db.sql('''
+        SELECT ROW_NUMBER() OVER ( ORDER BY name ) as row_num,
+            name, company, contact, designation, expected_start_date, deal_description, docstatus, workflow_state
+        FROM `tabPartner Lead`
+        WHERE sales_partner = %(sales_partner)s
+        ''', {'sales_partner': sales_partner}, as_dict=True)
 
-    # 4. open_lead_detail()
+    # 4. sales partner
+    context.sales_partner = sales_partner
     
     # 5. version
     context.version = get_version()

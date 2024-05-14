@@ -41,6 +41,9 @@ fixtures = [
 
     # export only those records that match the filters from the Role table
     {'dt': 'Role', 'filters': [['role_name', '=', 'Partner']]},
+
+    # export the Partner Lead Workflow
+    {'dt': 'Workflow', 'filters': [['document_type', '=', 'Partner Lead']]},
 ]
 
 
