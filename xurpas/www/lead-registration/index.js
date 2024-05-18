@@ -54,63 +54,96 @@ function update_lead(e) {
 
 
 function open_lead_modal(e = event) {
-    // Get the Lead ID
-    lead_name = e.currentTarget.getAttribute('lead-name');
-    document.getElementById('save_new_button').setAttribute('lead-name', lead_name);
+    if (e.currentTarget.getAttribute('mode') == 'New') {
+        // Set the values of the modal
+        document.getElementById('staticBackdropLabel').innerHTML = 'New Lead';
+        document.getElementById('company').value = '';
+        document.getElementById('contact').value = '';
+        document.getElementById('designation').value = '';
+        document.getElementById('start_date').value = '';
+        document.getElementById('description').value = '';
 
-    // Get the Lead details
-    frappe.call({
-        method: 'xurpas.xurpas_customizations.lead_registration.get_lead',
-        args: {
-            'name': lead_name
-        },
-        callback: function(r) {
-            // Set the values of the modal
-            document.getElementById('staticBackdropLabel').innerHTML = 'Edit Lead';
-            document.getElementById('company').value = r.message.company;
-            document.getElementById('contact').value = r.message.contact;
-            document.getElementById('designation').value = r.message.designation;
-            document.getElementById('start_date').value = r.message.expected_start_date;
-            document.getElementById('description').value = r.message.deal_description;
+        // Set company and contact to readonly
+        document.getElementById('company').readOnly = false;
+        document.getElementById('contact').readOnly = false;
+        document.getElementById('designation').readOnly = false;
+        document.getElementById('start_date').readOnly = false;
+        document.getElementById('description').readOnly = false;
 
-            // Set company and contact to readonly
-            document.getElementById('company').readOnly = true;
-            document.getElementById('contact').readOnly = true;
+        // Set font color for company and contact to black
+        document.getElementById('company').style.color = 'black';
+        document.getElementById('contact').style.color = 'black';
+        document.getElementById('designation').style.color = 'black';
+        document.getElementById('start_date').style.color = 'black';
+        document.getElementById('description').style.color = 'black';
 
-            // Set font color for company and contact to gray
-            document.getElementById('company').style.color = 'gray';
-            document.getElementById('contact').style.color = 'gray';
-            
-            if (r.message.docstatus > 0) {
-                // Disable the rest of the fields
-                document.getElementById('designation').readOnly = true;
-                document.getElementById('start_date').readOnly = true;
-                document.getElementById('description').readOnly = true;
+        // Enable the Save button
+        document.getElementById('save_new_button').disabled = false;
+        document.getElementById('save_new_button').setAttribute('lead-name', 'New');
 
-                // Set font color for the rest of the fields to gray
-                document.getElementById('designation').style.color = 'gray';
-                document.getElementById('start_date').style.color = 'gray';
-                document.getElementById('description').style.color = 'gray';
-            } else {
-                // Enable the rest of the fields
-                document.getElementById('designation').readOnly = false;
-                document.getElementById('start_date').readOnly = false;
-                document.getElementById('description').readOnly = false;
+    } else {
+        // Get the Lead ID
+        lead_name = e.currentTarget.getAttribute('lead-name');
+        document.getElementById('save_new_button').setAttribute('lead-name', lead_name);
 
-                // Set font color for the rest of the fields to black
-                document.getElementById('designation').style.color = 'black';
-                document.getElementById('start_date').style.color = 'black';
-                document.getElementById('description').style.color = 'black';
+        // Get the Lead details
+        frappe.call({
+            method: 'xurpas.xurpas_customizations.lead_registration.get_lead',
+            args: {
+                'name': lead_name
+            },
+            callback: function(r) {
+                // Set the values of the modal
+                document.getElementById('staticBackdropLabel').innerHTML = 'Edit Lead';
+                document.getElementById('company').value = r.message.company;
+                document.getElementById('contact').value = r.message.contact;
+                document.getElementById('designation').value = r.message.designation;
+                document.getElementById('start_date').value = r.message.expected_start_date;
+                document.getElementById('description').value = r.message.deal_description;
+
+                // Set company and contact to readonly
+                document.getElementById('company').readOnly = true;
+                document.getElementById('contact').readOnly = true;
+
+                // Set font color for company and contact to gray
+                document.getElementById('company').style.color = 'gray';
+                document.getElementById('contact').style.color = 'gray';
+                
+                if (r.message.docstatus > 0) {
+                    // Disable the rest of the fields
+                    document.getElementById('designation').readOnly = true;
+                    document.getElementById('start_date').readOnly = true;
+                    document.getElementById('description').readOnly = true;
+
+                    // Set font color for the rest of the fields to gray
+                    document.getElementById('designation').style.color = 'gray';
+                    document.getElementById('start_date').style.color = 'gray';
+                    document.getElementById('description').style.color = 'gray';
+
+                    // Disable the Save button
+                    document.getElementById('save_new_button').disabled = true;
+
+                } else {
+                    // Enable the rest of the fields
+                    document.getElementById('designation').readOnly = false;
+                    document.getElementById('start_date').readOnly = false;
+                    document.getElementById('description').readOnly = false;
+
+                    // Set font color for the rest of the fields to black
+                    document.getElementById('designation').style.color = 'black';
+                    document.getElementById('start_date').style.color = 'black';
+                    document.getElementById('description').style.color = 'black';
+                }
             }
 
-            var modal_lead = new bootstrap.Modal(document.getElementById('modal_new_lead'), {
-                keyboard: true
-            })
-        
-            modal_lead.show();
-        }
+        });
+    }
+
+    var modal_lead = new bootstrap.Modal(document.getElementById('modal_new_lead'), {
+        keyboard: true
     })
 
+    modal_lead.show();
 }
 
 
@@ -128,6 +161,6 @@ function submit_lead(e = event) {
     action_modal_primary.innerHTML = __('Submit');
     action_modal_secondary.innerHTML = __('Cancel');
     action_modal_primary.setAttribute('lead-name', lead_name);
-    
+
     $('#modal_action').modal('show');
 }

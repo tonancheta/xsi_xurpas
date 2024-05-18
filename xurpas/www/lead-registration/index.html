@@ -86,7 +86,7 @@
               {% endif %}
             </td>
             <td class='text-center'>
-              <div class='badge badge-primary translate-middle-x' lead-name='{{ lead.name }}' role='button' id='btn_edit_lead' onclick='open_lead_modal()'>{{ _('Edit') }}</div>
+              <div class='badge badge-primary translate-middle-x' mode='Edit' lead-name='{{ lead.name }}' role='button' id='btn_edit_lead' onclick='open_lead_modal()'>{{ _('Edit') }}</div>
               <div class='badge badge-primary translate-middle-x'> </div>
 
               {% if lead.docstatus > 0 %}
@@ -108,7 +108,7 @@
       <div class='btn btn-outline-primary' role='button' data-bs-toggle='offcanvas' data-bs-target='#offcanvasExample' aria-controls='offcanvasExample'>{{ _('Help') }}</div>
       &nbsp;
 
-      <div class='btn btn-primary' role='button' data-toggle='modal' data-target='#modal_new_lead'>{{ _('New Lead') }}</div>
+      <div class='btn btn-primary' role='button' mode='New' onclick='open_lead_modal()'>{{ _('New Lead') }}</div>
     </div>
 
     <small class='text-muted'>{{ _('Version') }} {{ version }}</small>
@@ -146,7 +146,7 @@
         </div>
         <div class='modal-body'>
           <div class='container-fluid px-2 py-2 border bg-light'>
-            <div class='row'>
+            <div class='row py-2'>
               <label>{{_('Company') }}</label><br />
               <input class='text-align-left bg-light' name='company' id='company'>
             </div>
