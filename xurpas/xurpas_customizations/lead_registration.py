@@ -32,7 +32,7 @@ def user_query(doctype, txt, searchfield, start, page_len, filters):
 
 
 @frappe.whitelist()
-def update_lead(company, contact, designation, start_date, description, sales_partner, lead_name = 'New'):
+def update_lead(company, contact, designation, start_date, deal_amount, deal_stage, description, sales_partner, lead_name = 'New'):
     print('** update_lead **')
 
     if lead_name == 'New':
@@ -44,6 +44,8 @@ def update_lead(company, contact, designation, start_date, description, sales_pa
     lead.contact = contact
     lead.designation = designation
     lead.expected_start_date = start_date
+    lead.estimated_deal_amount = deal_amount
+    lead.deal_stage = deal_stage
     lead.deal_description = description
     lead.sales_partner = sales_partner
 

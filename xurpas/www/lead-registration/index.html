@@ -57,7 +57,9 @@
           <th scope='col'>{{ _('Company Name') }}</th>
           <th scope='col'>{{ _('Contact') }}</th>
           <th scope='col'>{{ _('Designation') }}</th>
-          <th scope='col'>{{ _('Expected Start Date') }}</th>
+            <th scope='col' style='text-align: center'>{{ _('Start Date') }}</th>
+          <th scope='col' style='text-align: center'>{{ _('Deal Amt (PHP)') }}</th>
+          <th scope='col'>{{ _('Deal Stage') }}</th>
           <th class='text-center' scope='col'>{{ _('Status') }}</th>
           <th class='text-center' scope='col' text-align='left'>{{ _('Actions') }}</th>
         </tr>
@@ -69,17 +71,19 @@
             <td>{{ lead.company }}</td>
             <td>{{ lead.contact }}</td>
             <td>{{ lead.designation }}</td>
-            <td text-align='center'>{{ lead.expected_start_date }}</td>
+            <td style='text-align: center'>{{ lead.expected_start_date }}</td>
+            <td style='text-align: right'>{{ "{:,.2f}".format(lead.estimated_deal_amount) }}</td>
+            <td>{{ lead.deal_stage }}</td>
             
             <td class='text-center'>
               {% if lead.docstatus == 0 %}
                 <span class='badge rounded-pill bg-secondary'>{{ _('Draft') }}</span>
                 
               {% elif lead.docstatus == 2 %}
-                <span class='badge rounded-pill bg-info'>{{ _('Rejected') }}</span>
+                <span class='badge rounded-pill bg-danger'>{{ _('Rejected') }}</span>
 
               {% elif lead.workflow_state == 'Pending' %}
-                <span class='badge rounded-pill bg-info'>{{ _('Pending') }}</span>
+                <span class='badge rounded-pill bg-warning'>{{ _('Pending') }}</span>
                 
               {% else %}
                 <span class='badge rounded-pill bg-success'>{{ _('Approved') }}</span>
@@ -156,20 +160,35 @@
                 <input class='text-align-left bg-light' name='contact' id='contact'>
               </div>
               <div class='col'>
-                <label>{{_('Designation') }}</label><br />
-                <input class='text-align-left bg-light' name='designation' id='designation'>
-            </div>
-            <!-- <div class='row py-2'> -->
-              <div class='col'>
                 <label>{{_('Expected Start Date') }}</label><br />
                 <input class='text-align-left bg-light' name='start_date' id='start_date' type='date'>
               </div>
+            </div>
+            <div class='row py-2'>
+              <div class='col'>
+                <label>{{_('Designation') }}</label><br />
+                <input class='text-align-left bg-light' name='designation' id='designation'>
+              </div>
+              <div class='col'>
+                <label>{{_('Estimated Deal Amount') }}</label><br />
+                <input style='text-align: right' class='bg-light' name='deal_amount' id='deal_amount' type='number' step='0.01'>
+              </div>
+            </div>
+            <div class='row py-2'>
+              <div class='col'>
+              </div>               
+              <div class='col'>
+                <label>{{_('Deal Stage') }}</label><br />
+                <select class='form-select form-select-md bg-light' name='deal_stage' id='deal_stage' aria-label='Deal Stage' required>
+                </select>
+              </div>               
             </div>
             <div class='row'>
               <div class='input-group'>
                 <span class='input-group-text'>{{_('Deal Description') }}</span>
                 <textarea class='form-control' aria-label='With textarea' id='description'></textarea>
               </div>
+            </div>
         </div>
         <div class='modal-footer'>
           <button type='button' class='btn btn-primary' data-dismiss='modal' sales-partner='{{ sales_partner }}' lead-name = 'New' id='save_new_button' onclick='update_lead()'>{{ _('Save') }}</button>

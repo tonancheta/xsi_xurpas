@@ -1,0 +1,26 @@
+[
+ {
+  "amend": 0,
+  "cancel": 1,
+  "create": 1,
+  "delete": 0,
+  "docstatus": 0,
+  "doctype": "Custom DocPerm",
+  "email": 0,
+  "export": 1,
+  "if_owner": 0,
+  "import": 0,
+  "modified": "2024-05-18 18:02:59.142764",
+  "name": "f41532e744",
+  "parent": "Partner Lead",
+  "permlevel": 0,
+  "print": 0,
+  "read": 1,
+  "report": 0,
+  "role": "Sales Manager",
+  "select": 1,
+  "share": 0,
+  "submit": 1,
+  "write": 1
+ }
+]

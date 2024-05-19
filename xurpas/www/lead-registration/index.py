@@ -30,7 +30,8 @@ def get_context(context):
     # 3. leads
     context.leads = frappe.db.sql('''
         SELECT ROW_NUMBER() OVER ( ORDER BY name ) as row_num,
-            name, company, contact, designation, expected_start_date, deal_description, docstatus, workflow_state
+            name, company, contact, designation, expected_start_date, estimated_deal_amount, 
+            deal_description, deal_stage, docstatus, workflow_state
         FROM `tabPartner Lead`
         WHERE sales_partner = %(sales_partner)s
         ''', {'sales_partner': sales_partner}, as_dict=True)

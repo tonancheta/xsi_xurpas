@@ -44,6 +44,9 @@ fixtures = [
 
     # export the Partner Lead Workflow
     {'dt': 'Workflow', 'filters': [['document_type', '=', 'Partner Lead']]},
+    
+    # export custom permission
+    {'dt': 'Custom DocPerm', 'filters': [['parent', '=', 'Partner Lead'], ['role', '=', 'Sales Manager']]},
 ]
 
 

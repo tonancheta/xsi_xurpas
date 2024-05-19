@@ -12,9 +12,11 @@
   "amended_from",
   "section_break_pciw",
   "contact",
-  "expected_start_date",
-  "column_break_pjgv",
   "designation",
+  "column_break_pjgv",
+  "expected_start_date",
+  "estimated_deal_amount",
+  "deal_stage",
   "section_break_xxbk",
   "deal_description"
  ],
@@ -54,8 +56,10 @@
    "label": "Contact"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "expected_start_date",
    "fieldtype": "Date",
+   "in_list_view": 1,
    "label": "Expected Start Date"
   },
   {
@@ -72,15 +76,30 @@
    "fieldtype": "Section Break"
   },
   {
+   "allow_on_submit": 1,
    "fieldname": "deal_description",
    "fieldtype": "Small Text",
    "label": "Deal Description"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "estimated_deal_amount",
+   "fieldtype": "Currency",
+   "in_list_view": 1,
+   "label": "Estimated Deal Amount"
+  },
+  {
+   "allow_on_submit": 1,
+   "fieldname": "deal_stage",
+   "fieldtype": "Select",
+   "label": "Deal Stage",
+   "options": "Discovery Session\nEvaluate Solution\nEvaluate Proposal\nEndorsement (If Won)\nFeedback (If Lost)"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-05-13 11:18:32.033735",
+ "modified": "2024-05-18 22:41:59.876672",
  "modified_by": "Administrator",
  "module": "Xurpas Customizations",
  "name": "Partner Lead",
@@ -99,9 +118,26 @@
    "share": 1,
    "submit": 1,
    "write": 1
+  },
+  {
+   "amend": 1,
+   "cancel": 1,
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "Sales Manager",
+   "share": 1,
+   "submit": 1,
+   "write": 1
   }
  ],
+ "route": "part-lead",
  "sort_field": "modified",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "track_changes": 1
 }
