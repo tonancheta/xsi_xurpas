@@ -9,6 +9,7 @@
   "section_break_3xks",
   "sales_partner",
   "company",
+  "customer",
   "amended_from",
   "section_break_pciw",
   "contact",
@@ -94,12 +95,19 @@
    "fieldtype": "Select",
    "label": "Deal Stage",
    "options": "Discovery Session\nEvaluate Solution\nEvaluate Proposal\nEndorsement (If Won)\nFeedback (If Lost)"
+  },
+  {
+   "fieldname": "customer",
+   "fieldtype": "Link",
+   "hidden": 1,
+   "label": "Customer",
+   "options": "Customer"
   }
  ],
  "index_web_pages_for_search": 1,
  "is_submittable": 1,
  "links": [],
- "modified": "2024-05-18 22:41:59.876672",
+ "modified": "2024-05-19 20:33:47.971065",
  "modified_by": "Administrator",
  "module": "Xurpas Customizations",
  "name": "Partner Lead",

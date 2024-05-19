@@ -47,6 +47,12 @@ fixtures = [
     
     # export custom permission
     {'dt': 'Custom DocPerm', 'filters': [['parent', '=', 'Partner Lead'], ['role', '=', 'Sales Manager']]},
+
+    # export all item groups that begin with 'XSI'
+    {'dt': 'Item Group', 'filters': [['name', 'like', 'XSI%']]},
+
+    # export from Workspace Link where label is 'Partner Lead'
+    {'dt': 'Workspace Link', 'filters': [['label', '=', 'Partner Lead']]},
 ]
 
 

@@ -70,3 +70,20 @@ def submit_lead(lead_name):
     lead.save()
 
     return 'success'
+
+
+@frappe.whitelist()
+def create_customer(lead_name):
+    lead = frappe.get_doc('Partner Lead', lead_name)
+    customer = frappe.new_doc('Customer')
+    customer.customer_name = lead.company
+    customer.customer_type = 'Company'
+    customer.territory = 'Philippines'
+    customer.custom_from_partner_lead = lead.name
+    customer.default_sales_partner = lead.sales_partner
+    customer.save()
+
+    lead.customer = customer.name
+    lead.save()
+
+    return customer.name

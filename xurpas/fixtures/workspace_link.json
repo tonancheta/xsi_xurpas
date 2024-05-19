@@ -1,0 +1,23 @@
+[
+ {
+  "dependencies": null,
+  "description": null,
+  "docstatus": 0,
+  "doctype": "Workspace Link",
+  "hidden": 0,
+  "icon": null,
+  "is_query_report": 0,
+  "label": "Partner Lead",
+  "link_count": 0,
+  "link_to": "Partner Lead",
+  "link_type": "DocType",
+  "modified": "2024-05-19 15:02:11.970363",
+  "name": "984e9d6c13",
+  "onboard": 0,
+  "only_for": null,
+  "parent": "Selling",
+  "parentfield": "links",
+  "parenttype": "Workspace",
+  "type": "Link"
+ }
+]

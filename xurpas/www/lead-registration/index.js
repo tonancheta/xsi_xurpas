@@ -92,7 +92,7 @@ function open_lead_modal(e = event) {
         document.getElementById('contact').value = '';
         document.getElementById('designation').value = '';
         document.getElementById('start_date').value = '';
-        document.getElementById('deal_amount').value = '';
+        document.getElementById('deal_amount').value = '0.00';
         document.getElementById('deal_stage').value = '';
         document.getElementById('description').value = '';
         document.getElementById('save_new_button').setAttribute('lead-name', 'New');
@@ -109,13 +109,17 @@ function open_lead_modal(e = event) {
                 'name': lead_name
             },
             callback: function(r) {
+                // Format the deal amount
+                var deal_amt = frappe.format(r.message.estimated_deal_amount, { fieldtype: 'Currency', options: 'currency' }, { inline: true })
+                console.log('Deal Amount: ', r.message.estimated_deal_amount, ' | ', deal_amt)
+
                 // Set the values of the modal
                 document.getElementById('staticBackdropLabel').innerHTML = 'Edit Lead';
                 document.getElementById('company').value = r.message.company;
                 document.getElementById('contact').value = r.message.contact;
                 document.getElementById('designation').value = r.message.designation;
                 document.getElementById('start_date').value = r.message.expected_start_date;
-                document.getElementById('deal_amount').value = r.message.estimated_deal_amount;
+                document.getElementById('deal_amount').value = deal_amt;
                 document.getElementById('description').value = r.message.deal_description;
 
                 deal_stage_html  = '<option value="' + r.message.deal_stage + '">' + r.message.deal_stage + '</option>'
