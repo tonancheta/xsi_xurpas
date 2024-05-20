@@ -44,9 +44,10 @@ fixtures = [
 
     # export the Partner Lead Workflow
     {'dt': 'Workflow', 'filters': [['document_type', '=', 'Partner Lead']]},
+    {'dt': 'Workflow State', 'filters': [['name', 'in', 'Draft, Approved, Rejected, Pending']]},
     
     # export custom permission
-    {'dt': 'Custom DocPerm', 'filters': [['parent', '=', 'Partner Lead'], ['role', '=', 'Sales Manager']]},
+    {'dt': 'Custom DocPerm', 'filters': [['parent', '=', 'Partner Lead'], ['role', 'in', 'Partner, Sales Manager']]},
 
     # export all item groups that begin with 'XSI'
     {'dt': 'Item Group', 'filters': [['name', 'like', 'XSI%']]},
