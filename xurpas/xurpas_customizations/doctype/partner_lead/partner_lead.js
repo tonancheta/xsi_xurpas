@@ -30,8 +30,14 @@ frappe.ui.form.on("Partner Lead", {
                                 'lead_name': frm.doc.name
                             },
                             callback: (r) => {
-                                if (r.message) {
-                                    show_alert(__('Customer ' + r.message + ' created successfully.'), 5);
+                                if (r.message == 'Customer already exists') {
+                                    frappe.throw(__('Customer already exists.'));
+                                    
+                                } else {
+                                    frappe.show_alert({
+                                        message: __('Customer ' + r.message + ' created successfully.'),
+                                        indicator: 'green'
+                                    }, 5);
                                 }
                             }
                         });
@@ -39,5 +45,12 @@ frappe.ui.form.on("Partner Lead", {
                 );
             }
         });
-	}
+	},
+
+    onload(frm) {
+        // Display Customer field if value is not empty
+        if (frm.doc.customer) {
+            frm.set_df_property('customer', 'hidden', 0);
+        }
+    }
 });

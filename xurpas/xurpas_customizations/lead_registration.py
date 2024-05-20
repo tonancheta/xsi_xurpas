@@ -75,6 +75,11 @@ def submit_lead(lead_name):
 @frappe.whitelist()
 def create_customer(lead_name):
     lead = frappe.get_doc('Partner Lead', lead_name)
+    
+    if frappe.db.exists('Customer', lead.company):
+        return 'Customer already exists'
+    
+
     customer = frappe.new_doc('Customer')
     customer.customer_name = lead.company
     customer.customer_type = 'Company'
