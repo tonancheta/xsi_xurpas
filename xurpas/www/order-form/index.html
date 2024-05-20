@@ -1,6 +1,6 @@
 {% extends 'templates/web.html' %}
 
-{% block title %} {{ _('Lead Registration') }} {% endblock %}
+{% block title %} {{ _('Partner Order Form') }} {% endblock %}
 
 {% block head_include %}
 <!-- Bootstrap -->
@@ -28,7 +28,7 @@
 <header class='container'>
   <div>
     <div>
-        <h3>{{ _('Welcome to the Partner Lead Registration') }}</h3>
+        <h3>{{ _('Welcome to the Partner Order Form') }}</h3>
     </div>
   </div>
 </header>
@@ -54,35 +54,34 @@
       <thead>
         <tr>
           <th scope='col'>#</th>
+          <th scope='col'>{{ _('Order ID') }}</th>
           <th scope='col'>{{ _('Company Name') }}</th>
-          <th scope='col'>{{ _('Contact') }}</th>
-          <th scope='col'>{{ _('Designation') }}</th>
-          <th scope='col' style='text-align: center'>{{ _('Start Date') }}</th>
-          <th scope='col' style='text-align: center'>{{ _('Deal Amt (PHP)') }}</th>
-          <th scope='col'>{{ _('Deal Stage') }}</th>
+          <th scope='col'>{{ _('Date') }}</th>
+          <th scope='col'>{{ _('Grand Total') }}</th>
           <th class='text-center' scope='col'>{{ _('Status') }}</th>
           <th class='text-center' scope='col' text-align='left'>{{ _('Actions') }}</th>
         </tr>
       </thead>
       <tbody>
-        {% for lead in leads %}
+        {% for order in orders %}
           <tr>
-            <th scope='row'>{{ lead.row_num }}</th>
-            <td>{{ lead.company }}</td>
-            <td>{{ lead.contact }}</td>
-            <td>{{ lead.designation }}</td>
-            <td style='text-align: center'>{{ lead.expected_start_date }}</td>
-            <td style='text-align: right'>{{ '{:,.2f}'.format(lead.estimated_deal_amount) }}</td>
-            <td>{{ lead.deal_stage }}</td>
+            <th scope='row'>{{ order.row_num }}</th>
+            <td>{{ order.name }}</td>
+            <td>{{ order.customer_name }}</td>
+            <td>{{ order.transaction_date }}</td>
+            <td>{{ order.grand_total }}</td>
             
             <td class='text-center'>
-              {% if lead.docstatus == 0 %}
+              {% if order.docstatus == 0 %}
                 <span class='badge rounded-pill bg-secondary'>{{ _('Draft') }}</span>
                 
-              {% elif lead.docstatus == 2 %}
+              {% elif order.workflow_state == 'Rejected' %}
                 <span class='badge rounded-pill bg-danger'>{{ _('Rejected') }}</span>
 
-              {% elif lead.workflow_state == 'Pending' %}
+              {% elif order.workflow_state == 'Cancelled' %}
+                <span class='badge rounded-pill bg-danger'>{{ _('Cancelled') }}</span>
+
+              {% elif order.workflow_state == 'Pending' %}
                 <span class='badge rounded-pill bg-warning'>{{ _('Pending') }}</span>
                 
               {% else %}
@@ -90,15 +89,15 @@
               {% endif %}
             </td>
             <td class='text-center'>
-              <div class='badge badge-primary translate-middle-x' mode='Edit' lead-name='{{ lead.name }}' role='button' id='btn_edit_lead' onclick='open_lead_modal()'>{{ _('Edit') }}</div>
+              <div class='badge badge-primary translate-middle-x' mode='Edit' order-name='{{ order.name }}' role='button' id='btn_edit_lead' onclick='open_order_modal()'>{{ _('Edit') }}</div>
               <div class='badge badge-primary translate-middle-x'> </div>
 
-              {% if lead.docstatus > 0 %}
-                <div class='badge badge-primary bg-secondary translate-middle-x' lead-name='{{ lead.name }}' 
+              {% if order.docstatus > 0 %}
+                <div class='badge badge-primary bg-secondary translate-middle-x' order-name='{{ order.name }}' 
                   id='btn_submit_lead' disabled>{{ _('Submit') }}</div>
               {% else %}
-                <div class='badge badge-primary bg-success translate-middle-x' lead-name='{{ lead.name }}' role='button' 
-                  id='btn_submit_lead' onclick='submit_lead()'>{{ _('Submit') }}</div>
+                <div class='badge badge-primary bg-success translate-middle-x' order-name='{{ order.name }}' role='button' 
+                  id='btn_submit_lead' onclick='submit_order()'>{{ _('Submit') }}</div>
               {% endif %}
             </td>
           </tr>
@@ -112,7 +111,7 @@
       <div class='btn btn-outline-primary' role='button' data-bs-toggle='offcanvas' data-bs-target='#offcanvasExample' aria-controls='offcanvasExample'>{{ _('Help') }}</div>
       &nbsp;
 
-      <div class='btn btn-primary' role='button' mode='New' onclick='open_lead_modal()'>{{ _('New Lead') }}</div>
+      <div class='btn btn-primary' role='button' mode='New' onclick='open_order_modal()'>{{ _('New Order') }}</div>
     </div>
 
     <small class='text-muted'>{{ _('Version') }} {{ version }}</small>
@@ -138,12 +137,12 @@
   </div>
   <!-- ./ Action Confirmation Modal -->
 
-  <!-- New Lead Modal -->
-  <div class='modal fade' id='modal_new_lead' data-backdrop='static' data-keyboard='true' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+  <!-- New Order Modal -->
+  <div class='modal fade' id='modal_new_order' data-backdrop='static' data-keyboard='true' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
     <div class='modal-dialog modal-dialog-centered modal-lg'>
       <div class='modal-content'>
         <div class='modal-header'>
-          <h5 class='modal-title' id='staticBackdropLabel'>{{ _('New Lead') }}</h5>
+          <h5 class='modal-title' id='staticBackdropLabel'>{{ _('New Order') }}</h5>
           <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
             <span aria-hidden='true'>&times;</span>
           </button>
@@ -151,52 +150,38 @@
         <div class='modal-body'>
           <div class='container-fluid px-2 py-2 border bg-light'>
             <div class='row py-2'>
-              <label>{{_('Company') }}</label><br />
+              <label>{{_('Customer') }}</label><br />
               <input class='text-align-left bg-light' name='company' id='company'>
             </div>
             <div class='row py-2'>
               <div class='col'>
-                <label>{{_('Contact') }}</label><br />
-                <input class='text-align-left bg-light' name='contact' id='contact'>
-              </div>
-              <div class='col'>
-                <label>{{_('Expected Start Date') }}</label><br />
-                <input class='text-align-left bg-light' name='start_date' id='start_date' type='date'>
+                <label>{{_('Date') }}</label><br />
+                <input class='text-align-left bg-light' name='transaction_date' id='transaction_date' type='date'>
               </div>
             </div>
-            <div class='row py-2'>
-              <div class='col'>
-                <label>{{_('Designation') }}</label><br />
-                <input class='text-align-left bg-light' name='designation' id='designation'>
-              </div>
-              <div class='col'>
-                <label>{{_('Estimated Deal Amount') }}</label><br />
-                <input style='text-align: right' class='bg-light' name='deal_amount' id='deal_amount' type='text'>
-              </div>
-            </div>
-            <div class='row py-2'>
-              <div class='col'>
-              </div>               
-              <div class='col'>
-                <label>{{_('Deal Stage') }}</label><br />
-                <select class='form-select form-select-md bg-light' name='deal_stage' id='deal_stage' aria-label='Deal Stage' required>
-                </select>
-              </div>               
-            </div>
-            <div class='row'>
-              <div class='input-group'>
-                <span class='input-group-text'>{{_('Deal Description') }}</span>
-                <textarea class='form-control' aria-label='With textarea' id='description'></textarea>
-              </div>
-            </div>
+            <hr />
+            <h6>{{ _('Order Items') }}</h6>
+            <table class='table table-sm table-striped' style='width: 100%'  id='order_items'>
+              <thead>
+                <tr>
+                  <th>SKU</th>
+                  <th>Description</th>
+                  <th>UoM</th>
+                  <th>Qty</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div class='modal-footer'>
-          <button type='button' class='btn btn-primary' data-dismiss='modal' sales-partner='{{ sales_partner }}' lead-name = 'New' id='save_new_button' onclick='update_lead()'>{{ _('Save') }}</button>
+          <button type='button' class='btn btn-primary' data-dismiss='modal' sales-partner='{{ sales_partner }}' order-name = 'New' id='save_new_button' onclick='update_lead()'>{{ _('Save') }}</button>
           <button type='button' class='btn btn-secondary' data-dismiss='modal'>{{ _('Cancel') }}</button>
         </div>
       </div>
     </div>  
   </div>
-  <!-- ./ New Lead Modal -->
+  <!-- ./ New Order Modal -->
 </main>
 {% endblock %}
