@@ -89,7 +89,7 @@
               {% endif %}
             </td>
             <td class='text-center'>
-              <div class='badge badge-primary translate-middle-x' mode='Edit' order-name='{{ order.name }}' role='button' id='btn_edit_lead' onclick='open_order_modal()'>{{ _('Edit') }}</div>
+              <div class='badge badge-primary translate-middle-x' sales-partner='{{ sales_partner }}' order-name='{{ order.name }}' role='button' id='btn_edit_lead' onclick='open_order_modal()'>{{ _('Edit') }}</div>
               <div class='badge badge-primary translate-middle-x'> </div>
 
               {% if order.docstatus > 0 %}
@@ -111,7 +111,7 @@
       <div class='btn btn-outline-primary' role='button' data-bs-toggle='offcanvas' data-bs-target='#offcanvasExample' aria-controls='offcanvasExample'>{{ _('Help') }}</div>
       &nbsp;
 
-      <div class='btn btn-primary' role='button' mode='New' onclick='open_order_modal()'>{{ _('New Order') }}</div>
+      <div class='btn btn-primary' role='button' sales-partner='{{ sales_partner }}' order-name='New' onclick='open_order_modal()'>{{ _('New Order') }}</div>
     </div>
 
     <small class='text-muted'>{{ _('Version') }} {{ version }}</small>
@@ -147,36 +147,12 @@
             <span aria-hidden='true'>&times;</span>
           </button>
         </div>
-        <div class='modal-body'>
-          <div class='container-fluid px-2 py-2 border bg-light'>
-            <div class='row py-2'>
-              <label>{{_('Customer') }}</label><br />
-              <input class='text-align-left bg-light' name='company' id='company'>
-            </div>
-            <div class='row py-2'>
-              <div class='col'>
-                <label>{{_('Date') }}</label><br />
-                <input class='text-align-left bg-light' name='transaction_date' id='transaction_date' type='date'>
-              </div>
-            </div>
-            <hr />
-            <h6>{{ _('Order Items') }}</h6>
-            <table class='table table-sm table-striped' style='width: 100%'  id='order_items'>
-              <thead>
-                <tr>
-                  <th>SKU</th>
-                  <th>Description</th>
-                  <th>UoM</th>
-                  <th>Qty</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
-          </div>
+        <div class='modal-body' id='modal-body'>
+            <!-- Insert modal body here from open_order_modal() -->
         </div>
         <div class='modal-footer'>
-          <button type='button' class='btn btn-primary' data-dismiss='modal' sales-partner='{{ sales_partner }}' order-name = 'New' id='save_new_button' onclick='update_lead()'>{{ _('Save') }}</button>
+          <button type='button' class='btn btn-primary' data-dismiss='modal' sales-partner='{{ sales_partner }}' order-name = 'New' id='save_new_button' onclick='update_order()'>{{ _('Save') }}</button>
+          <button type='button' class='btn btn-secondary' id='add_order_items' onclick='add_order_items()'>{{ _('Add Items') }}</button>
           <button type='button' class='btn btn-secondary' data-dismiss='modal'>{{ _('Cancel') }}</button>
         </div>
       </div>
