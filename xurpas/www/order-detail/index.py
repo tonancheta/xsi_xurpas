@@ -49,6 +49,8 @@ def get_context(context):
         FROM `tabSales Order Item`
         WHERE parent = %(order_name)s
         ''', {'order_name': order_name}, as_dict=True)
+    
+    context.item_count = len(context.items)
 
     # 5. sales partner
     context.sales_partner = sales_partner

@@ -140,7 +140,7 @@
       <div class='btn btn-secondary' role='button' item-name='New' onclick='open_order_item()'>{{ _('Add Item') }}</div>
       &nbsp;
       
-      {% if docstatus > 0 %}
+      {% if (docstatus > 0) or (item_count == 0) %}
         <div class='btn btn-primary' role='button' id='btn_action_order' onclick='action_order()' disabled>{{ _('Save Order') }}</div>
       {% else %}
         <div class='btn btn-primary' role='button' id='btn_action_order' onclick='action_order()'>{{ _('Save Order') }}</div>
