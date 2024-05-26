@@ -41,4 +41,3 @@ def get_context(context):
     
     # 5. version
     context.version = get_version()
-    pass
