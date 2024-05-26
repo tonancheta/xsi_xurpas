@@ -1,6 +1,6 @@
 {% extends 'templates/web.html' %}
 
-{% block title %} {{ page_title }} {% endblock %}
+{% block title %} {{ _('Order Form') }} {% endblock %}
 
 {% block head_include %}
 <!-- Bootstrap -->
@@ -28,7 +28,7 @@
 <header class='container'>
   <div>
     <div>
-        <h3>{{ _('Welcome to the Partner Order Form') }}</h3>
+        <h3>{{ page_title }}</h3>
     </div>
   </div>
 </header>
@@ -44,61 +44,87 @@
     
 
   {% else %}
-    <!-- Load list of Registered Leads -->   
-    <div class='mt-4'>
-      {{ welcome_text }}
-      <br /><br /><br />
-    </div>
+    <!-- Customer and Transaction Date Form -->
+    <br />
 
+    <form>
+      <div class='row'>
+        <div class='col-md-6'>
+          <div class='mb-3'>
+            <label for='customer' class='form-label'>{{ _('Customer' ) }}</label> &nbsp;
+            <select class='form-select form-select-sm bg-light' name='customer' id='customer' aria-label='Customer' required>
+              <option value=''>Select Customer</option>
+
+              {% for customer in customers %}
+                <option value='{{ customer.name }}'>{{ customer.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+        </div>
+        <div class='col-md-6'>
+          <div class='mb-3'>
+            <label for='sales_partner' class='form-label'>{{ _('Sales Partner') }}</label>
+            <input type='text' class='form-control' id='sales_partner' value='{{ sales_partner }}' readonly>
+          </div>
+        </div>
+      </div> 
+      <div class='row mb-3'>
+        <div class='col-md-6'>
+          <div class='input-group mb-3'>
+            <div class='input-group-text' id='basic-addon1'>Transaction Date</div>
+            <input type='date' class='form-control-md' id='transaction_date' value='{{ today }}' required>
+          </div>
+        </div>
+        <div class='col-md-6'>
+          <div class='input-group mb-3'>
+            {% if docstatus == 0 %}
+              <span class='input-group-text bg-secondary'>{{ _('Draft') }}</span>
+              
+            {% elif docstatus == 2 %}
+              <span class='input-group-text bg-danger'>{{ _('Rejected') }}</span>
+
+            {% elif workflow_state == 'Pending' %}
+              <span class='input-group-text bg-warning'>{{ _('Pending') }}</span>
+              
+            {% else %}
+              <span class='input-group-text bg-success'>{{ _('Approved') }}</span>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </form>
+    
+    <hr>
+
+    <!-- Load list of Item Codes -->   
     <table class='table table-md table-striped' style='width: 100%' id='main_table'>
       <thead>
         <tr>
           <th scope='col'>#</th>
-          <th scope='col'>{{ _('Order ID') }}</th>
-          <th scope='col'>{{ _('Company Name') }}</th>
-          <th scope='col'>{{ _('Date') }}</th>
-          <th scope='col'>{{ _('Grand Total') }}</th>
-          <th class='text-center' scope='col'>{{ _('Status') }}</th>
+          <th scope='col'>{{ _('SKU') }}</th>
+          <th scope='col'>{{ _('Description') }}</th>
+          <th scope='col'>{{ _('UoM') }}</th>
+          <th class='text-center' scope='col'>{{ _('Qty') }}</th>
+          <th class='text-center' scope='col'>{{ _('Rate') }}</th>
+          <th class='text-center' scope='col'>{{ _('Amount') }}</th>
           <th class='text-center' scope='col' text-align='left'>{{ _('Actions') }}</th>
         </tr>
       </thead>
       <tbody>
-        {% for order in orders %}
+        {% for item in items %}
           <tr>
-            <th scope='row'>{{ order.row_num }}</th>
-            <td>{{ order.name }}</td>
-            <td>{{ order.customer_name }}</td>
-            <td>{{ order.transaction_date }}</td>
-            <td>{{ order.grand_total }}</td>
+            <th scope='row'>{{ item.row_num }}</th>
+            <td>{{ item.item_code }}</td>
+            <td>{{ item.description }}</td>
+            <td>{{ item.qty }}</td>
+            <td>{{ item.uom }}</td>
+            <td>{{ item.base_rate }}</td>
+            <td>{{ item.amount }}</td>
             
             <td class='text-center'>
-              {% if order.docstatus == 0 %}
-                <span class='badge rounded-pill bg-secondary'>{{ _('Draft') }}</span>
-                
-              {% elif order.workflow_state == 'Rejected' %}
-                <span class='badge rounded-pill bg-danger'>{{ _('Rejected') }}</span>
-
-              {% elif order.workflow_state == 'Cancelled' %}
-                <span class='badge rounded-pill bg-danger'>{{ _('Cancelled') }}</span>
-
-              {% elif order.workflow_state == 'Pending' %}
-                <span class='badge rounded-pill bg-warning'>{{ _('Pending') }}</span>
-                
-              {% else %}
-                <span class='badge rounded-pill bg-success'>{{ _('Approved') }}</span>
-              {% endif %}
-            </td>
-            <td class='text-center'>
-              <div class='badge badge-primary translate-middle-x' sales-partner='{{ sales_partner }}' order-name='{{ order.name }}' role='button' id='btn_edit_lead' onclick='open_order_form()'>{{ _('Edit') }}</div>
+              <div class='badge badge-primary translate-middle-x' item-name='{{ item.name }}' role='button' id='btn_edit_item' onclick='open_order_item()'>{{ _('Edit') }}</div>
               <div class='badge badge-primary translate-middle-x'> </div>
-
-              {% if order.docstatus > 0 %}
-                <div class='badge badge-primary bg-secondary translate-middle-x' order-name='{{ order.name }}' 
-                  id='btn_submit_lead' disabled>{{ _('Submit') }}</div>
-              {% else %}
-                <div class='badge badge-primary bg-success translate-middle-x' order-name='{{ order.name }}' role='button' 
-                  id='btn_submit_lead' onclick='submit_order()'>{{ _('Submit') }}</div>
-              {% endif %}
+              <div class='badge badge-danger translate-middle-x' item-name='{{ item.name }}' role='button' id='btn_del_item' onclick='delete_order_item()'>{{ _('Delete') }}</div>
             </td>
           </tr>
         {% endfor %}
@@ -110,8 +136,15 @@
     <div class='d-flex bd-highlight mb-3'>
       <div class='btn btn-outline-primary' role='button' data-bs-toggle='offcanvas' data-bs-target='#offcanvasExample' aria-controls='offcanvasExample'>{{ _('Help') }}</div>
       &nbsp;
-
-      <div class='btn btn-primary' role='button' sales-partner='{{ sales_partner }}' order-name='New' onclick='open_order_form()'>{{ _('New Order') }}</div>
+      
+      <div class='btn btn-secondary' role='button' item-name='New' onclick='open_order_item()'>{{ _('Add Item') }}</div>
+      &nbsp;
+      
+      {% if docstatus > 0 %}
+        <div class='btn btn-primary' role='button' id='btn_action_order' onclick='action_order()' disabled>{{ _('Save Order') }}</div>
+      {% else %}
+        <div class='btn btn-primary' role='button' id='btn_action_order' onclick='action_order()'>{{ _('Save Order') }}</div>
+      {% endif %}
     </div>
 
     <small class='text-muted'>{{ _('Version') }} {{ version }}</small>
@@ -137,12 +170,12 @@
   </div>
   <!-- ./ Action Confirmation Modal -->
 
-  <!-- New Order Modal -->
-  <div class='modal fade' id='modal_new_order' data-backdrop='static' data-keyboard='true' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+  <!-- New Order Item Modal -->
+  <div class='modal fade' id='modal_new_item' data-backdrop='static' data-keyboard='true' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
     <div class='modal-dialog modal-dialog-centered modal-lg'>
       <div class='modal-content'>
         <div class='modal-header'>
-          <h5 class='modal-title' id='staticBackdropLabel'>{{ _('New Order') }}</h5>
+          <h5 class='modal-title' id='staticBackdropLabel'>{{ _('New Order Item') }}</h5>
           <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
             <span aria-hidden='true'>&times;</span>
           </button>
@@ -158,6 +191,6 @@
       </div>
     </div>  
   </div>
-  <!-- ./ New Order Modal -->
+  <!-- ./ New Order Item Modal -->
 </main>
 {% endblock %}

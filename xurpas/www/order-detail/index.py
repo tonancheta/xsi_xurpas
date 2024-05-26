@@ -25,20 +25,36 @@ def get_context(context):
     # 2. page title
     order_name = frappe.form_dict.get('order-name')
     sales_partner = frappe.form_dict.get('sales-partner')
-
-    context.page_title = _('Order No. ') + order_name
     
-    # 3. leads
-    context.leads = frappe.db.sql('''
-        SELECT ROW_NUMBER() OVER ( ORDER BY name ) as row_num,
-            name, company, contact, designation, expected_start_date, estimated_deal_amount, 
-            deal_description, deal_stage, docstatus, workflow_state
-        FROM `tabPartner Lead`
-        WHERE sales_partner = %(sales_partner)s
+    if order_name == 'New':
+        context.page_title = _('New Order')
+        context.docstatus = 0
+    else:
+        context.page_title = _('Order No. ') + order_name
+        context.order = frappe.get_doc('Sales Order', order_name)
+        context.docstatus = context.order.docstatus
+
+    # 3. customers
+    context.customers = frappe.db.sql('''
+        SELECT name
+        FROM `tabCustomer`
+        WHERE default_sales_partner = %(sales_partner)s
+        ORDER BY name
         ''', {'sales_partner': sales_partner}, as_dict=True)
-
-    # 4. sales partner
-    context.sales_partner = sales_partner
     
-    # 5. version
+    # 4. leads
+    context.items = frappe.db.sql('''
+        SELECT ROW_NUMBER() OVER ( ORDER BY name ) as row_num,
+            name, item_code, description, qty, uom, base_rate, amount
+        FROM `tabSales Order Item`
+        WHERE parent = %(order_name)s
+        ''', {'order_name': order_name}, as_dict=True)
+
+    # 5. sales partner
+    context.sales_partner = sales_partner
+
+    # 6. today's date
+    context.today = datetime.date.today()
+    
+    # 7. version
     context.version = get_version()

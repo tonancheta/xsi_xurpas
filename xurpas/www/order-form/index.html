@@ -116,48 +116,5 @@
 
     <small class='text-muted'>{{ _('Version') }} {{ version }}</small>
   {% endif %} 
-  
-  <!-- Action Confirmation Modal -->
-  <div class='modal fade' id='modal_action' data-backdrop='static' data-keyboard='true' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
-    <div class='modal-dialog modal-dialog-centered' id='modal_action_box'>
-      <div class='modal-content'>
-        <div class='modal-header'>
-          <h5 class='modal-title' id='modal_action_title'></h5>
-          <button type='button' class='close' data-bs-dismiss='modal' aria-label='Close'>
-            <span aria-hidden='true'>&times;</span>
-          </button>
-        </div>
-        <div class='modal-body' id='modal_action_body'></div>
-        <div class='modal-footer'>
-          <button type='button' class='btn btn-primary' data-bs-dismiss='modal' id='modal_action_primary'></button>
-          <button type='button' class='btn btn-secondary' data-bs-dismiss='modal' id='modal_action_secondary'></button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!-- ./ Action Confirmation Modal -->
-
-  <!-- New Order Modal -->
-  <div class='modal fade' id='modal_new_order' data-backdrop='static' data-keyboard='true' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
-    <div class='modal-dialog modal-dialog-centered modal-lg'>
-      <div class='modal-content'>
-        <div class='modal-header'>
-          <h5 class='modal-title' id='staticBackdropLabel'>{{ _('New Order') }}</h5>
-          <button type='button' class='close' data-dismiss='modal' aria-label='Close'>
-            <span aria-hidden='true'>&times;</span>
-          </button>
-        </div>
-        <div class='modal-body' id='modal-body'>
-            <!-- Insert modal body here from open_order_modal() -->
-        </div>
-        <div class='modal-footer'>
-          <button type='button' class='btn btn-primary' data-dismiss='modal' sales-partner='{{ sales_partner }}' order-name = 'New' id='save_new_button' onclick='update_order()'>{{ _('Save') }}</button>
-          <button type='button' class='btn btn-secondary' id='add_order_items' onclick='add_order_items()'>{{ _('Add Items') }}</button>
-          <button type='button' class='btn btn-secondary' data-dismiss='modal'>{{ _('Cancel') }}</button>
-        </div>
-      </div>
-    </div>  
-  </div>
-  <!-- ./ New Order Modal -->
 </main>
 {% endblock %}
